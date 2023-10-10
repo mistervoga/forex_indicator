@@ -30,7 +30,7 @@ export class ForexTrendIndicator {
     const currentPrice = this.prices[this.prices.length - 1];
     const sma = this.calculateSMA();
 
-    return currentPrice > sma;
+    return currentPrice >= sma;
   }
 
   isLongTermBearish(): boolean {

@@ -11,12 +11,22 @@
     <div class="container">
       <h1>Forex Trend Indicator</h1>
       <div class="pair-input">
+        <label for="basePair">Select Base Pair:</label>
+        <select id="basePair">
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+          <!-- Add more base pairs here -->
+        </select>
+      </div>
+
+      <div class="pair-input">
         <label for="pair">Select Forex Pair:</label>
         <select id="pair">
-          <option value="EURUSD">EUR</option>
-          <option value="GBPUSD">GBP</option>
-          <option value="USDJPY">AUD</option>
-          <!-- Add more currency pairs here -->
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+          <!-- Options for target pair will be added dynamically -->
         </select>
       </div>
 

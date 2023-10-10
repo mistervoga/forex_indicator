@@ -6,3 +6,4 @@ node_modules
 .env 
 */.env
 bun.lockb
+sma
