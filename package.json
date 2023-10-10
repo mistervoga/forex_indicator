@@ -4,12 +4,15 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "build": "npx tsc"
+    "type-check": "tsc --noEmit",
+    "build:ts": "esbuild src/main.ts --outfile=dist/main.js --bundle --minify --loader:.ts=ts",
+    "build": "bun run type-check && bun run build:ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "esbuild": "^0.19.4",
     "typescript": "^5.2.2"
   }
 }

@@ -16,3 +16,9 @@
    ```bash
    git clone https://github.com/mistervoga/forex_indicator.git
    ```
+
+2. **Run the build script:**
+
+   ```bash
+   npm run build
+   ```
