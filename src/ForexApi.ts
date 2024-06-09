@@ -1,42 +1,26 @@
-// ForexApi.ts
+// forexapi.ts
 
-interface ForexApiResponse {
-  disclaimer: string;
-  license: string;
-  timestamp: number;
-  base: string;
-  rates: { [currency: string]: number };
+const API_URL = "https://api.example.com/forex"; // Replace with actual API URL if needed
+
+export async function getLatestPrice(pair: string): Promise<number> {
+  // Simulate fetching price from an API
+  try {
+    const response = await fetch(`${API_URL}/latest?pair=${pair}`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data.price;
+  } catch (error) {
+    console.error("Error fetching the latest price:", error);
+    throw error;
+  }
 }
 
-export async function fetchForexPrice(
-  basePair: string,
-  selectedPair: string
-): Promise<number> {
-  const apiKey = "9f9d64e9cd084b74ac22e3972ec0c1f5"; // Replace with your API key
-
-  // Construct the API URL for the specific currency pair
-  const apiUrl = `https://openexchangerates.org/api/latest.json?app_id=${apiKey}&base=${basePair}`;
-
-  try {
-    const response = await fetch(apiUrl);
-
-    if (!response.ok) {
-      throw new Error(
-        `Network response was not ok (${response.status}: ${response.statusText})`
-      );
-    }
-
-    const data: ForexApiResponse = await response.json();
-    console.log(data);
-    // Extract the price for the specified currency pair
-    const price = data.rates[selectedPair];
-
-    if (typeof price !== "number") {
-      throw new Error(`Price data for ${selectedPair} not available.`);
-    }
-
-    return price;
-  } catch (error: any) {
-    throw new Error(`Error fetching forex data: ${error.message}`);
-  }
+export function simulatePrice(previousPrice: number): number {
+  // Simulate the price change
+  const volatility = 0.02; // Simulated volatility percentage
+  const change = (Math.random() * 2 - 1) * volatility; // Random change between -volatility and +volatility
+  const newPrice = previousPrice * (1 + change);
+  return parseFloat(newPrice.toFixed(4)); // Return price rounded to 4 decimal places
 }

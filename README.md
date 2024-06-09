@@ -17,8 +17,18 @@
    git clone https://github.com/mistervoga/forex_indicator.git
    ```
 
-2. **Run the build script:**
+2. **Change directory and install dependencies:**
 
    ```bash
-   npm run build
+   cd forex_indicator
+   ```
+
+   ```bash
+   bun install
+   ```
+
+3. **Run the build script:**
+
+   ```bash
+   bun run build
    ```

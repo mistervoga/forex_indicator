@@ -1,18 +1,21 @@
 {
   "name": "forex_indicator",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "version": "0.0.1",
+  "description": "Forex Trend Indicator",
+  "main": "src/main.ts",
   "scripts": {
     "type-check": "tsc --noEmit",
     "build:ts": "esbuild src/main.ts --outfile=dist/main.js --bundle --minify --loader:.ts=ts",
     "build": "bun run type-check && bun run build:ts"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Nicolas von Garrel",
+  "license": "GPL-3.0",
   "devDependencies": {
     "esbuild": "^0.19.4",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
   }
 }
