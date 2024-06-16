@@ -1,5 +1,3 @@
-// main.ts
-
 import { ForexTrendIndicator } from "./ForexTrendIndicator";
 import { simulatePrice } from "./ForexApi";
 
@@ -16,25 +14,31 @@ async function main() {
     const targetPair = (document.getElementById("pair") as HTMLSelectElement)
       .value;
     const pair = `${basePair}${targetPair}`;
+    const indicatorType = (
+      document.getElementById("indicatorType") as HTMLSelectElement
+    ).value as "SMA" | "EMA";
 
     resultDiv.innerHTML = `<h2>Fetching data for ${pair}</h2>`;
 
-    const trendIndicator = new ForexTrendIndicator(PERIOD);
+    const trendIndicator = new ForexTrendIndicator(PERIOD, indicatorType);
     let currentPrice = INITIAL_PRICE;
 
     try {
       resultDiv.innerHTML += "<ul>";
-      for (let i = 0; i < 20; i++) {
+      while (true) {
         // Simulate the price
         currentPrice = simulatePrice(currentPrice);
         trendIndicator.addPrice(currentPrice);
 
-        const sma = trendIndicator.calculateSMA();
+        const indicatorValue =
+          indicatorType === "SMA"
+            ? trendIndicator.calculateSMA()
+            : trendIndicator.calculateEMA();
         const bullish = trendIndicator.isLongTermBullish();
         const bearish = trendIndicator.isLongTermBearish();
 
         const listItem = document.createElement("li");
-        listItem.textContent = `Price: ${currentPrice}, SMA: ${sma}, Trend: ${
+        listItem.textContent = `Price: ${currentPrice}, ${indicatorType}: ${indicatorValue}, Trend: ${
           bullish ? "Bullish" : bearish ? "Bearish" : "Neutral"
         }`;
         resultDiv.appendChild(listItem);
