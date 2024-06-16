@@ -1,43 +1,54 @@
 // main.ts
 
 import { ForexTrendIndicator } from "./ForexTrendIndicator";
-import { getLatestPrice, simulatePrice } from "./ForexApi";
+import { simulatePrice } from "./ForexApi";
 
-const PAIR = "EURUSD"; // Replace with the currency pair you are interested in
-const PERIOD = 50; // Example period for the moving average
+const PERIOD = 14; // Example period for the moving average
 const INITIAL_PRICE = 1.1; // Example initial price for simulation
 
 async function main() {
-  const trendIndicator = new ForexTrendIndicator(PERIOD);
-  let currentPrice = INITIAL_PRICE;
+  const fetchButton = document.getElementById("fetchInfo") as HTMLButtonElement;
+  const resultDiv = document.getElementById("result") as HTMLDivElement;
 
-  try {
-    // Simulate fetching prices in a loop
-    while (true) {
-      // Uncomment the line below to fetch real prices from an API
-      // currentPrice = await getLatestPrice(PAIR);
+  fetchButton.addEventListener("click", async () => {
+    const basePair = (document.getElementById("basePair") as HTMLSelectElement)
+      .value;
+    const targetPair = (document.getElementById("pair") as HTMLSelectElement)
+      .value;
+    const pair = `${basePair}${targetPair}`;
 
-      // Simulate the price
-      currentPrice = simulatePrice(currentPrice);
-      trendIndicator.addPrice(currentPrice);
-      console.log(
-        `Price: ${currentPrice}, SMA: ${trendIndicator.calculateSMA()}`
-      );
+    resultDiv.innerHTML = `<h2>Fetching data for ${pair}</h2>`;
 
-      if (trendIndicator.isLongTermBullish()) {
-        console.log("The trend is bullish.");
-      } else if (trendIndicator.isLongTermBearish()) {
-        console.log("The trend is bearish.");
-      } else {
-        console.log("Not enough data to determine the trend.");
+    const trendIndicator = new ForexTrendIndicator(PERIOD);
+    let currentPrice = INITIAL_PRICE;
+
+    try {
+      resultDiv.innerHTML += "<ul>";
+      for (let i = 0; i < 20; i++) {
+        // Simulate the price
+        currentPrice = simulatePrice(currentPrice);
+        trendIndicator.addPrice(currentPrice);
+
+        const sma = trendIndicator.calculateSMA();
+        const bullish = trendIndicator.isLongTermBullish();
+        const bearish = trendIndicator.isLongTermBearish();
+
+        const listItem = document.createElement("li");
+        listItem.textContent = `Price: ${currentPrice}, SMA: ${sma}, Trend: ${
+          bullish ? "Bullish" : bearish ? "Bearish" : "Neutral"
+        }`;
+        resultDiv.appendChild(listItem);
+
+        // Wait for a while before fetching the next price (e.g., 1 second for simulation)
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
-
-      // Wait for a while before fetching the next price (e.g., 1 minute)
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1,000 ms = 1 second (for faster simulation)
+      resultDiv.innerHTML += "</ul>";
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      resultDiv.innerHTML = `<p class="text-danger">Error in fetching data: ${errorMessage}</p>`;
     }
-  } catch (error) {
-    console.error("Error in main execution:", error);
-  }
+  });
 }
 
 main();
